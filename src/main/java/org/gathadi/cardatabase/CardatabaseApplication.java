@@ -13,7 +13,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import java.util.Arrays;
 
-@SpringBootApplication
+@SpringBootApplication(scanBasePackages = "org.gathadi.cardatabase")
 public class CardatabaseApplication implements CommandLineRunner {
     private static final Logger logger = LoggerFactory.getLogger(CardatabaseApplication.class);
 

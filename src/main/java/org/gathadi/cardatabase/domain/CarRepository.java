@@ -1,13 +1,14 @@
 package org.gathadi.cardatabase.domain;
 
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.repository.query.Param;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 
 import java.util.List;
 
-@RepositoryRestResource(path = "api")
+@RepositoryRestResource
 public interface CarRepository extends CrudRepository<Car, Long> {
-    @Query("Select c from Car c where c.brand = ?1")
-    List<Car> findByBrand(String brand);
+    //Fetch cars by brand
+    List<Car> findByBrand(@Param("brand") String brand);
+    List<Car> findByColor(@Param("color") String color);
 }
