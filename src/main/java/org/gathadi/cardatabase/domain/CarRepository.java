@@ -6,7 +6,7 @@ import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 
 import java.util.List;
 
-@RepositoryRestResource
+@RepositoryRestResource(path = "api")
 public interface CarRepository extends CrudRepository<Car, Long> {
     @Query("Select c from Car c where c.brand = ?1")
     List<Car> findByBrand(String brand);
