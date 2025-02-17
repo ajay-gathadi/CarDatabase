@@ -1,10 +1,7 @@
 package org.gathadi.cardatabase;
 
 import jakarta.transaction.Transactional;
-import org.gathadi.cardatabase.domain.Car;
-import org.gathadi.cardatabase.domain.CarRepository;
-import org.gathadi.cardatabase.domain.Owner;
-import org.gathadi.cardatabase.domain.OwnerRepository;
+import org.gathadi.cardatabase.domain.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
@@ -19,10 +16,12 @@ public class CardatabaseApplication implements CommandLineRunner {
 
     private final CarRepository carRepository;
     private final OwnerRepository ownerRepository;
+    private final AppUserRepository appUserRepository;
 
-    public CardatabaseApplication(CarRepository carRepository, OwnerRepository ownerRepository) {
+    public CardatabaseApplication(CarRepository carRepository, OwnerRepository ownerRepository, AppUserRepository appUserRepository) {
         this.carRepository = carRepository;
         this.ownerRepository = ownerRepository;
+        this.appUserRepository = appUserRepository;
     }
 
     public static void main(String[] args) {
@@ -46,5 +45,15 @@ public class CardatabaseApplication implements CommandLineRunner {
                     car.getBrand(), car.getModel(), car.getColor(), car.getRegisterNumber(), car.getModelYear(),
                     car.getPrice());
         }
+
+        /**
+         * Create users: user/user and admin/admin
+         * Passwords are encoded using bcrypt which is a strong hashing function.
+         * In the passwords, $2a represents the algorithm version, and
+         * $10 represents the strength of the algorithm.
+         * The default strenth of Spring Security's BCryptPasswordEncoder is 10.
+         */
+        appUserRepository.save(new AppUser("user", "$2a$10$3","USER"));
+        appUserRepository.save(new AppUser("admin", "$2a$10$4","ADMIN"));
     }
 }
