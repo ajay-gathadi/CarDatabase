@@ -46,14 +46,14 @@ public class CardatabaseApplication implements CommandLineRunner {
                     car.getPrice());
         }
 
-        /**
+        /*
          * Create users: user/user and admin/admin
          * Passwords are encoded using bcrypt which is a strong hashing function.
          * In the passwords, $2a represents the algorithm version, and
          * $10 represents the strength of the algorithm.
          * The default strenth of Spring Security's BCryptPasswordEncoder is 10.
          */
-        appUserRepository.save(new AppUser("user", "$2a$10$3","USER"));
-        appUserRepository.save(new AppUser("admin", "$2a$10$4","ADMIN"));
+        appUserRepository.save(new AppUser("user", "$2a$10$NVM0n8ElaRgg7zWO1CxUdei7vWoPg91Lz2aYavh9.f9q0e4bRadue","USER"));
+        appUserRepository.save(new AppUser("admin", "$2a$10$8cjz47bjbR4Mn8GMg9IZx.vyjhLXR/SKKMSZ9.mP9vpMu0ssKi8GW","ADMIN"));
     }
 }
