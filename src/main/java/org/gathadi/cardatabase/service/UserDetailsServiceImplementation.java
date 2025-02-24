@@ -3,6 +3,7 @@ package org.gathadi.cardatabase.service;
 import org.gathadi.cardatabase.domain.AppUser;
 import org.gathadi.cardatabase.domain.AppUserRepository;
 import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.User.UserBuilder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -21,7 +22,7 @@ public class UserDetailsServiceImplementation implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         Optional<AppUser> user = appUserRepository.findByUsername(username);
-        User.UserBuilder builder;
+        UserBuilder builder;
 
         if(user.isPresent()){
             AppUser currentUser = user.get();
