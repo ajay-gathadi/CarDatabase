@@ -1,12 +1,12 @@
 package org.gathadi.cardatabase.service;
 
+
 import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
-import io.jsonwebtoken.security.Keys;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Component;
 
+import javax.crypto.SecretKey;
 import java.security.Key;
 import java.time.Instant;
 import java.util.Date;
@@ -17,16 +17,16 @@ public class JWTService {
     private static final String PREFIX = "Bearer";
     //Generate secret key. Only for demonstration purposes.
     //In Production, this shall read it from application configuration.
-    private static final Key SECRET_KEY = Keys.secretKeyFor(SignatureAlgorithm.HS256);
+    //private static final Key SECRET_KEY = Keys.secretKeyFor(Jwts.SIG.HS256);
+    private static final SecretKey SECRET_KEY = Jwts.SIG.HS256.key().build();
 
     //Generate signed JWT Token
     public String getToken(String username){
-        String token = Jwts.builder()
-                .setSubject(username)
-                .setExpiration(Date.from(Instant.now().plusMillis(EXPIRATION_TIME)))
+        return Jwts.builder()
+                .subject(username)
+                .expiration(Date.from(Instant.now().plusMillis(EXPIRATION_TIME)))
                 .signWith(SECRET_KEY)
                 .compact();
-        return token;
     }
 
 
@@ -34,17 +34,12 @@ public class JWTService {
     // verify the token, and get username
     public String getAuthUser(HttpServletRequest httpServletRequest){
         String token = httpServletRequest.getHeader(HttpHeaders.AUTHORIZATION);
-        if (httpServletRequest != null){
-            String user = Jwts.parser()
-                    .setSigningKey(SECRET_KEY)
-                    .build()
-                    .parseClaimsJws(token.replace(PREFIX,""))
-                    .getBody()
-                    .getSubject();
 
-            if( user != null)
-                return user;
-        }
-        return null;
+        return Jwts.parser()
+                .verifyWith(SECRET_KEY)
+                .build()
+                .parseUnsecuredClaims(token.replace(PREFIX, ""))
+                .getPayload()
+                .getSubject();
     }
 }
