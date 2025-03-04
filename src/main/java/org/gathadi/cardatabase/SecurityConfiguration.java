@@ -14,6 +14,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer;
 
 @Configuration
 @EnableWebSecurity
@@ -49,8 +50,11 @@ public class SecurityConfiguration {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception{
         http.csrf(AbstractHttpConfigurer::disable)
                 .sessionManagement((session) -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .authorizeHttpRequests((authorizeHttpRequest) -> authorizeHttpRequest.requestMatchers(HttpMethod.POST,"/login").permitAll()
+                .authorizeHttpRequests((authorizeHttpRequest) -> authorizeHttpRequest
+                        .requestMatchers(HttpMethod.POST,"/login").permitAll()
+                        .requestMatchers("/error").permitAll()
                         .anyRequest().authenticated());
+
 
         return http.build();
     }
