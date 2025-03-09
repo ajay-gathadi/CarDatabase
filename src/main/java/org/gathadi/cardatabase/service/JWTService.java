@@ -3,6 +3,8 @@ package org.gathadi.cardatabase.service;
 
 import io.jsonwebtoken.Jwts;
 import jakarta.servlet.http.HttpServletRequest;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Component;
 
@@ -13,8 +15,9 @@ import java.util.Date;
 
 @Component
 public class JWTService {
+    private static final Logger logger = LoggerFactory.getLogger(JWTService.class);
     private static final long EXPIRATION_TIME = 864_000_000;
-    private static final String PREFIX = "Bearer";
+    public static final String PREFIX = "Bearer";
     //Generate secret key. Only for demonstration purposes.
     //In Production, this shall read it from application configuration.
     //private static final Key SECRET_KEY = Keys.secretKeyFor(Jwts.SIG.HS256);
@@ -35,6 +38,7 @@ public class JWTService {
     public String getAuthUser(HttpServletRequest httpServletRequest){
         String token = httpServletRequest.getHeader(HttpHeaders.AUTHORIZATION);
 
+        logger.info("*** Token *** : " +token);
         return Jwts.parser()
                 .verifyWith(SECRET_KEY)
                 .build()

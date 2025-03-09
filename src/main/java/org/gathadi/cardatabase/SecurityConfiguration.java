@@ -15,14 +15,17 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
 @EnableWebSecurity
 public class SecurityConfiguration {
     private final UserDetailsServiceImplementation userDetailsService;
+    private final AuthenticationFilter authenticationFilter;
 
-    public SecurityConfiguration(UserDetailsServiceImplementation userDetailsService) {
+    public SecurityConfiguration(UserDetailsServiceImplementation userDetailsService, AuthenticationFilter authenticationFilter) {
         this.userDetailsService = userDetailsService;
+        this.authenticationFilter = authenticationFilter;
     }
 
     /**
@@ -53,7 +56,8 @@ public class SecurityConfiguration {
                 .authorizeHttpRequests((authorizeHttpRequest) -> authorizeHttpRequest
                         .requestMatchers(HttpMethod.POST,"/login").permitAll()
                         .requestMatchers("/error").permitAll()
-                        .anyRequest().authenticated());
+                        .anyRequest().authenticated())
+                .addFilterBefore(authenticationFilter, UsernamePasswordAuthenticationFilter.class);
 
 
         return http.build();
